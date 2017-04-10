@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Tugas_6;
+package latihan6;
 
+import Tugas_6.*;
 import java.awt.Color;
 import static java.awt.image.ImageObserver.WIDTH;
 import java.sql.*;
@@ -493,6 +494,8 @@ public class FormDataBuku extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(FormDataBuku.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
