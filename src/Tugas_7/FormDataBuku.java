@@ -3,9 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Tugas_6;
+package Tugas_7;
 
+import LatihanModul7.*;
+import Tugas_6.*;
 import java.awt.Color;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import static java.awt.image.ImageObserver.WIDTH;
 import java.sql.*;
 import javax.swing.JOptionPane;
@@ -81,6 +85,20 @@ public class FormDataBuku extends javax.swing.JFrame {
         }
  
  }
+    private boolean validasi(String judul,String penulis){
+        try {
+            String sql = "SELECT * FROM buku WHERE judul='"+judul+"' AND penulis='"+penulis+"';";
+            stt = con.createStatement();
+            rss = stt.executeQuery(sql);
+            if(rss.next())
+                return true;
+            else 
+                return false;
+        } catch (SQLException e) {
+            System.out.print(e.getMessage());
+            return false;
+        }
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -158,6 +176,12 @@ public class FormDataBuku extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Harga");
+
+        txtHarga.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtHargaKeyTyped(evt);
+            }
+        });
 
         cmbPenulis.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tere Liye", "W.S Rendra", "Felix Siauw", "Asma Nadia", "Dewi Lestari" }));
 
@@ -376,12 +400,23 @@ public class FormDataBuku extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        if(txtJudul.getText().length() !=0 && txtHarga.getText().length()!=0){
         String judul = txtJudul.getText();
         String penulis = cmbPenulis.getSelectedItem().toString();
         String harga = txtHarga.getText();
+        
+        if(validasi(judul,penulis)){
+                JOptionPane.showMessageDialog(this, "Judul dan Penulis Sudah Ada!");
+        }else{
         TambahData(judul, penulis, harga);
         InitTable();
         TampilData();
+        
+        JOptionPane.showMessageDialog(this, "Berhasil Simpan Data");
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "Isi Data yang Lengkap !!");
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
@@ -416,19 +451,35 @@ public class FormDataBuku extends javax.swing.JFrame {
 
     private void BubahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BubahActionPerformed
         // TODO add your handling code here:
+        if(txtJudul.getText().length() !=0 && txtHarga.getText().length()!=0){
         int baris = jTable1.getSelectedRow();
         String id = jTable1.getValueAt(baris, 0).toString();
         String judul = txtJudul.getText();
         String penulis = cmbPenulis.getSelectedItem().toString();
         String harga = txtHarga.getText();
-        if(UbahData(id, judul, penulis, harga))
+        String tabelharga = jTable1.getValueAt(baris, 3).toString();
+        if(validasi(judul,penulis)){
+            
+        if(tabelharga.equals(harga)){
+            JOptionPane.showMessageDialog(this, "Judul dan Penulis Sudah Ada!");
+        }else{
+            UbahData(id, judul, penulis, harga);
+            InitTable();
+            TampilData();
             JOptionPane.showMessageDialog(null,"Berhasil Update Data");
-        else
-           JOptionPane.showMessageDialog(null,"Gagal Update Data"); 
-        InitTable();TampilData();
-    
+            Bubah.setEnabled(false);
+            btnHapus.setEnabled(false);
+            }
+        }else{
+            UbahData(id,judul,penulis,harga);
+            InitTable();
+            TampilData();
+            JOptionPane.showMessageDialog(null,"Berhasil Update Data");
+            Bubah.setEnabled(false);
+            btnHapus.setEnabled(false);
+            }
     }//GEN-LAST:event_BubahActionPerformed
-
+ }
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
         int baris=jTable1.getSelectedRow();
@@ -467,6 +518,18 @@ public class FormDataBuku extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cariCaretUpdate
 
+    private void txtHargaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtHargaKeyTyped
+        // TODO add your handling code here:
+        txtHarga.addKeyListener(new KeyAdapter(){
+             public void keyTyped(KeyEvent e){
+                 char karakter = e.getKeyChar();
+                 if(!((karakter >='0') && (karakter<='9') || (karakter == '\b'))){
+                     e.consume();
+                 }
+             }
+        });
+    }//GEN-LAST:event_txtHargaKeyTyped
+
     
     /**
      * @param args the command line arguments
@@ -493,6 +556,8 @@ public class FormDataBuku extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(FormDataBuku.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 

@@ -210,6 +210,9 @@
             <Component class="javax.swing.JTextField" name="txtJudul">
             </Component>
             <Component class="javax.swing.JTextField" name="txtHarga">
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtHargaKeyTyped"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JComboBox" name="cmbPenulis">
               <Properties>
